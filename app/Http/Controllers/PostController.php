@@ -19,7 +19,11 @@ class PostController extends Controller
     // 顯示文章(們)
     public function index(Request $request)
     {
-        $posts = Post::with(['user'])->latest()->paginate(3);
+        $posts = cache()->rememberForever('posts-data-page:' . request('page', default:1), function(){
+            return Post::with(['user'])->latest()->paginate(3);
+        });
+
+        cache()->forever('posts-data-last-page', $posts->lastPage());
 
         return Inertia::render('PostPage', [
             'isAuth' => Auth::check(),
