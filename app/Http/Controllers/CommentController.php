@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Log;
+use App\Models\Post;
 use App\Models\Comment;
+use App\Jobs\SendEmailJob;
 
 class CommentController extends Controller
 {
@@ -35,6 +37,20 @@ class CommentController extends Controller
 
         Log::info('使用者:{user_id} 在貼文:{post_id} 留言成功', ['user_id' => auth()->user()->id,'post_id'=> intval($post_id)]);
 
+        $post = Post::with(['user'])->where('id', $post_id)->first();
+
+        $otherCommentsCount = Comment::where('post_id', $post_id)
+        ->where('user_id','<>',$post->user_id)->count();
+        
+        $mailData = [
+            'title' => '有文章有不少留言',
+            'message' => '你在 '.$post->created_at. ' 發文名為 '.$post->title  . ' 的文章有不少留言!!',
+        ];
+
+        // 如果其他人(們)留下三則就發信
+        if($post->user->email_verified_at && $otherCommentsCount===3){
+            SendEmailJob::dispatch($post->user->email,$mailData);
+        }
 
 
         // 彈窗訊息
