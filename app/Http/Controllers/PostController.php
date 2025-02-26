@@ -17,7 +17,12 @@ class PostController extends Controller
     // 顯示文章(們)
     public function index(Request $request)
     {
+        $posts = Post::with(['user'])->latest()->paginate(3);
 
+        return Inertia::render('PostPage', [
+            'isAuth' => Auth::check(),
+            'posts' => $posts,
+        ]);
     }
     
     // 發文章
