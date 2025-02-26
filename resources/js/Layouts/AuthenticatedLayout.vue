@@ -23,9 +23,9 @@ const showingNavigationDropdown = ref(false);
                             <!-- Logo -->
                            
                             <div class="flex shrink-0 items-center">
-                                
-                                <p>看文章</p>
-                               
+                                <Link :href="route('posts.index')">
+                                    <p>看文章</p>
+                                </Link>
                             </div>
 
                             <!-- Navigation Links -->
