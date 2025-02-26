@@ -10,6 +10,8 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Log;
 use App\Models\Post;
+use App\Models\Comment;
+
 
 class PostController extends Controller
 {
@@ -17,7 +19,16 @@ class PostController extends Controller
     // 顯示文章(們)
     public function index(Request $request)
     {
+        $posts = cache()->rememberForever('posts-data-page:' . request('page', default:1), function(){
+            return Post::with(['user'])->latest()->paginate(3);
+        });
 
+        cache()->forever('posts-data-last-page', $posts->lastPage());
+
+        return Inertia::render('PostPage', [
+            'isAuth' => Auth::check(),
+            'posts' => $posts,
+        ]);
     }
     
     // 發文章
@@ -49,5 +60,18 @@ class PostController extends Controller
         ];
        
         return back()->with(['message'=>$message]);   
+    }
+
+    // 顯示單一文章和留言
+    public function show(Request $request, $post_id){
+        
+        $post = Post::with(['user'])->where('id',$post_id)->get();
+        $comments = Comment::with(['user'])->where('post_id',$post_id)
+                    ->latest()->paginate(5);
+        return Inertia::render('PagePostDetail', [
+            'isAuth' => Auth::check(),
+            'post' => $post,
+            'comments' => $comments,
+        ]);
     }
 }

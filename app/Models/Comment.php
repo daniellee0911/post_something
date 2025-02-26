@@ -6,21 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 
-class Post extends Model
+class Comment extends Model
 {
     use HasFactory, Notifiable;
 
     protected $fillable = [
+        'post_id',
         'user_id',
-        'title',
-        'content',
-       
+        'message',
     ];
 
     protected $hidden = [
         
-       'updated_at',
-    ];
+        'updated_at',
+     ];
 
     protected $casts = [
         
@@ -36,9 +35,8 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function comments()
+    public function post()
     {
-        return $this->hasMany(Comment::class);
+        return $this->belongsTo(Post::class);
     }
-    
 }
