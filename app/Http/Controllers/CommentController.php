@@ -22,7 +22,7 @@ class CommentController extends Controller
 
 
         $request->validate([
-            'message' => ['string','max:255'],
+            'message' => ['required','string','max:255'],
         ]);
 
         Log::info('使用者:{user_id} 在貼文:{post_id} 留言資料沒問題...', ['user_id' => auth()->user()->id,'post_id'=> intval($post_id)]);
