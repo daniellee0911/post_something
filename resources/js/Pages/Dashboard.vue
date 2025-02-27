@@ -45,7 +45,6 @@ const submit = () => {
                     </div> -->
                     <form class="p-12 space-y-4" @submit.prevent="submit">
                         <div class="text-center">
-                            
                             <input
                                 type="title"
                                 name="title"
@@ -53,21 +52,23 @@ const submit = () => {
                                 placeholder="標題..." 
                                 class="w-3/4 px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
                             />
-                            
+                            <p v-if="formData.errors.title" class="text-sm text-red-600">
+                                {{ formData.errors.title }}
+                            </p>
                         </div>
-                        
-                        <div class="text-center">
-                            
-                            
-                            
+                    
+                        <div class="text-center"> 
                             <textarea 
                             v-model="formData.content"
                             name="content" 
                             placeholder="寫點什麼吧..." 
                             class="w-3/4 px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40" 
                                 rows="5" ></textarea>
-                        
+                            <p v-if="formData.errors.content" class="text-sm text-red-600">
+                                {{ formData.errors.content }}
+                            </p>
                         </div>
+                       
                     
                         <div class="text-center">
                             <button
