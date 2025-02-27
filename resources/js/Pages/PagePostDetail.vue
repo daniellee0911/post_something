@@ -121,6 +121,9 @@ const sendMessage = () => {
                                         <span class="ml-2">送出</span>
                                         </button>
                                     </div>
+                                    <p v-if="formData.errors.message" class="text-sm text-red-600">
+                                        {{ formData.errors.message }}
+                                    </p>
                                     </form>
                                 </div>
                                 <div class="pt-6">
