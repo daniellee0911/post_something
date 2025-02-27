@@ -37,8 +37,8 @@ class PostController extends Controller
         Log::info('使用者:{user_id} 正要發文...', ['user_id' => auth()->user()->id]);
 
         $request->validate([
-            'title' => ['string','max:255'],
-            'content' => ['string','max:255']
+            'title' => ['required','string','max:255'],
+            'content' => ['required','string','max:255']
         ]);
 
         Log::info('使用者:{user_id} 發文資料沒問題...', ['user_id' => auth()->user()->id]);
